@@ -56,16 +56,28 @@ except URLError as e:
 # output it on screen
 #streamlit.dataframe(fruityvice_normalized)
 
+streamlit.header("The Fruit Load list contains:")
+#snowflake related function
+def get_fyuit_load_list():
+  with my_cnx.cursor() as mu_cur:
+       my_cur.execute("SELECT * from fruit_load_list")
+      return my_cur_fetchall()
+
+#add a button to load the fruit
+if streamlit.button('Get fruit load list'):
+   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+   my_data_rows = my_cur.fetchall()
+   streamlit.dataframe(my_data_rows)
 streamlit.stop()
 #import snowflake.connector
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("SELECT * from fruit_load_list")
-my_data_rows = my_cur.fetchall()
-streamlit.text("The Fruit Load list contains:")
-streamlit.dataframe(my_data_rows)
-
-add_my_fruit = streamlit.text_input('What fruit would you like to add?','Kiwi')
-add_my_fruit_response = requests.get("https://fruityvice.com/api/fruit/" + add_my_fruit)
-streamlit.write('Thanks for adding ', add_my_fruit)
-my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+#my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+#my_cur = my_cnx.cursor()
+#my_cur.execute("SELECT * from fruit_load_list")
+#my_data_rows = my_cur.fetchall()
+#streamlit.text("The Fruit Load list contains:")
+#streamlit.dataframe(my_data_rows)
+#
+#add_my_fruit = streamlit.text_input('What fruit would you like to add?','Kiwi')
+#add_my_fruit_response = requests.get("https://fruityvice.com/api/fruit/" + add_my_fruit)
+#streamlit.write('Thanks for adding ', add_my_fruit)
+#my_cur.execute("insert into fruit_load_list values ('from streamlit')")
